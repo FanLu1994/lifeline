@@ -155,6 +155,19 @@ export default function Home() {
     }
   }, [darkMode]);
 
+  // Helper to handle number input changes (allows clearing the input)
+  const handleNumberChange = (
+    value: string,
+    onChange: (value: number) => void
+  ) => {
+    if (value === "") {
+      onChange(0);
+    } else {
+      const num = parseFloat(value);
+      onChange(isNaN(num) ? 0 : num);
+    }
+  };
+
   const spouseTotalIncome = useMemo(() => {
     if (!familyStatus.married || unemploymentMode === "both") return 0;
     return familyStatus.spouseIncome + familyStatus.spousePassiveIncome;
@@ -329,8 +342,8 @@ export default function Home() {
                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">¥</span>
                             <input
                               type="number"
-                              value={familyStatus.spouseIncome}
-                              onChange={(e) => setFamilyStatus({ ...familyStatus, spouseIncome: Number(e.target.value) })}
+                              value={familyStatus.spouseIncome || ""}
+                              onChange={(e) => handleNumberChange(e.target.value, (v) => setFamilyStatus({ ...familyStatus, spouseIncome: v }))}
                               className="w-full pl-8 pr-4 py-2.5 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none transition-all"
                               placeholder="0"
                             />
@@ -342,8 +355,8 @@ export default function Home() {
                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">¥</span>
                             <input
                               type="number"
-                              value={familyStatus.spousePassiveIncome}
-                              onChange={(e) => setFamilyStatus({ ...familyStatus, spousePassiveIncome: Number(e.target.value) })}
+                              value={familyStatus.spousePassiveIncome || ""}
+                              onChange={(e) => handleNumberChange(e.target.value, (v) => setFamilyStatus({ ...familyStatus, spousePassiveIncome: v }))}
                               className="w-full pl-8 pr-4 py-2.5 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none transition-all"
                               placeholder="0"
                             />
@@ -471,8 +484,8 @@ export default function Home() {
                           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">¥</span>
                           <input
                             type="number"
-                            value={savings.cash}
-                            onChange={(e) => setSavings({ ...savings, cash: Number(e.target.value) })}
+                            value={savings.cash || ""}
+                            onChange={(e) => handleNumberChange(e.target.value, (v) => setSavings({ ...savings, cash: v }))}
                             className="w-full pl-8 pr-4 py-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                             placeholder="0"
                           />
@@ -484,8 +497,8 @@ export default function Home() {
                           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">¥</span>
                           <input
                             type="number"
-                            value={savings.bank}
-                            onChange={(e) => setSavings({ ...savings, bank: Number(e.target.value) })}
+                            value={savings.bank || ""}
+                            onChange={(e) => handleNumberChange(e.target.value, (v) => setSavings({ ...savings, bank: v }))}
                             className="w-full pl-8 pr-4 py-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                             placeholder="0"
                           />
@@ -497,8 +510,8 @@ export default function Home() {
                           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">¥</span>
                           <input
                             type="number"
-                            value={savings.liquidity}
-                            onChange={(e) => setSavings({ ...savings, liquidity: Number(e.target.value) })}
+                            value={savings.liquidity || ""}
+                            onChange={(e) => handleNumberChange(e.target.value, (v) => setSavings({ ...savings, liquidity: v }))}
                             className="w-full pl-8 pr-4 py-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                             placeholder="0"
                           />
@@ -541,8 +554,8 @@ export default function Home() {
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm">¥</span>
                                 <input
                                   type="number"
-                                  defaultValue={item.default}
-                                  onChange={(e) => setExpenses({ ...expenses, [item.id]: Number(e.target.value) })}
+                                  value={(expenses[item.id] ?? item.default) || ""}
+                                  onChange={(e) => handleNumberChange(e.target.value, (v) => setExpenses({ ...expenses, [item.id]: v }))}
                                   className="w-full pl-8 pr-3 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-red-200 dark:border-red-900/50 text-sm text-zinc-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all"
                                 />
                               </div>
@@ -562,8 +575,8 @@ export default function Home() {
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm">¥</span>
                                 <input
                                   type="number"
-                                  defaultValue={item.default}
-                                  onChange={(e) => setExpenses({ ...expenses, [item.id]: Number(e.target.value) })}
+                                  value={(expenses[item.id] ?? item.default) || ""}
+                                  onChange={(e) => handleNumberChange(e.target.value, (v) => setExpenses({ ...expenses, [item.id]: v }))}
                                   className="w-full pl-8 pr-3 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-sm text-zinc-900 dark:text-white focus:ring-2 focus:ring-zinc-400 focus:border-transparent outline-none transition-all"
                                 />
                               </div>
@@ -583,8 +596,8 @@ export default function Home() {
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm">¥</span>
                                 <input
                                   type="number"
-                                  defaultValue={item.default}
-                                  onChange={(e) => setExpenses({ ...expenses, [item.id]: Number(e.target.value) })}
+                                  value={(expenses[item.id] ?? item.default) || ""}
+                                  onChange={(e) => handleNumberChange(e.target.value, (v) => setExpenses({ ...expenses, [item.id]: v }))}
                                   className="w-full pl-8 pr-3 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-sm text-zinc-900 dark:text-white focus:ring-2 focus:ring-zinc-400 focus:border-transparent outline-none transition-all"
                                 />
                               </div>
@@ -637,8 +650,8 @@ export default function Home() {
                               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm">¥</span>
                               <input
                                 type="number"
-                                defaultValue={item.default}
-                                onChange={(e) => setPassiveIncome({ ...passiveIncome, [item.id]: Number(e.target.value) })}
+                                value={(passiveIncome[item.id] ?? item.default) || ""}
+                                onChange={(e) => handleNumberChange(e.target.value, (v) => setPassiveIncome({ ...passiveIncome, [item.id]: v }))}
                                 className="w-full pl-8 pr-3 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-emerald-200 dark:border-emerald-900/50 text-sm text-zinc-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
                                 placeholder="0"
                               />
